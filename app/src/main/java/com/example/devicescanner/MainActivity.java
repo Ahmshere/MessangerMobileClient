@@ -38,12 +38,16 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            registerUser(new User(email, password, phoneNumber));
+            try {
+                registerUser(new User(email, password, phoneNumber));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
-    private void registerUser(User user) {
-        ApiService apiService = ApiConfig.getRetrofit().create(ApiService.class);
+    private void registerUser(User user) throws Exception {
+        ApiService apiService = ApiConfig.getRetrofit(this).create(ApiService.class);
         Call<Void> call = apiService.registerUser(user);
 
         call.enqueue(new Callback<Void>() {
